@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	#@meta('订单详情信息')
+</head>
+<body style="padding:15px;">
+<div class="container-fluid">
+		<div class="panel-heading">
+			<div class="panel-title">订单信息</div>
+		</div>
+		<div class="panel-body">
+			<div class="table-tools" style="margin-bottom: 15px;">
+				<div class="tools-group">
+					<a style="color: white" href="/admin/customer/order/details/#(c.id)"><button data-toggle="modal" data-target="" class="btn btn-primary"><i class="icon icon-refresh"></i> 刷新</button></a>
+					#if(c.status == '申请退款')
+					<a style="color: white"  href="/admin/customer/order/agree/#(c.id)"><button onclick="var agree = (confirm('确定要退款吗?')); return agree "  data-toggle="modal" data-target="" class="btn btn-success"><i class="icon icon-check"></i> 同意退单</button></a>
+					#end
+				</div>
+			</div>
+
+			<div id="datagrid" class="datagrid datagrid-striped">
+				<div class="datagrid-container table-responsive"></div>
+				<div class="pager"></div>
+			</div>
+			<table border="1" class="table table-bordered">
+				<thead></thead>
+				<tbody>
+				<tr>
+					<th width="15%">手机号码</th>
+					<td width="35%">#(c.telphone)</td>
+					<th width="15%">订单号</th>
+					<td width="35%">#(c.order_no)</td>
+				</tr>
+
+				<tr>
+					<th>项目名称</th>
+					<td>#(c.item_name)</td>
+					<th>价格</th>
+					<td>#(c.price)</td>
+				</tr>
+
+				<tr>
+					<th>状态</th>
+					<td>#(c.status)</td>
+					<th>结算状态</th>
+					<td>#(c.settle_status)</td>
+				</tr>
+
+				<tr>
+					<th>佣金</th>
+					<td>#(c.commission)</td>
+					<th>返点</th>
+					<td>#(c.order_rate)</td>
+				</tr>
+
+				<tr>
+					<th>级别</th>
+					<td>#(c.level_id)</td>
+					<th>下单时间</th>
+					<td>#(c.addtime)</td>
+				</tr>
+
+				<tr>
+					<th>结束时间</th>
+					<td>#(c.overtime)</td>
+					<th>退款金额</th>
+					<td>#(c.refund_amount)</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

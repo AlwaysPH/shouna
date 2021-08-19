@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+#@meta('添加文章')
+</head>
+<body style="padding:15px;">
+	<form class="form-condensed" method="post" enctype="multipart/form-data" action="/admin/sys/article/save">
+	  <div class="form-group">
+	    <label class="required">名称</label>
+	    <input type="text" name="s.title" class="form-control" required>
+	  </div>
+		<div class="form-group">
+			<label>作者</label>
+			<input type="text" name="s.author" class="form-control" >
+		</div>
+		<div class="form-group">
+			<label>类型</label>
+			<select name="s.type" class="form-control">
+				<option value="">请选择</option>
+				<option value="url">跳转地址</option>
+				<option value="article">文章</option>
+				<option value="img">图片</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label>分组</label>
+			<select name="s.group_code" class="form-control">
+				<option value="">请选择</option>
+				<option value="flash_img">文章</option>
+				<option value="carousel_img">轮播图</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label>图片</label>
+			<input type="file" name="img" class="form-control" required>
+		</div>
+		<div class="form-group">
+			<label class="required">内容</label>
+			<textarea name="s.content" class="form-control" placeholder="请输入内容"></textarea>
+		</div>
+	  <button type="submit" class="btn btn-primary">提交</button>
+	</form>
+</body>
+</html>

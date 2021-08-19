@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+#@meta('新增城市')
+</head>
+<body style="padding:15px;">
+	<form class="form-condensed" method="post" action="/admin/sys/city/save">
+		<div class="form-group">
+			<label class="required">城市</label>
+			<input type="text" name="s.name" value="#(s.name)" class="form-control" required>
+		</div>
+		<div class="form-group">
+			<label class="required">城市英文名</label>
+			<input type="text" name="s.englishName" value="#(s.englishName)" class="form-control" required>
+		</div>
+		<div class="form-group">
+			<label>上门费</label>
+			<input type="text" name="s.price" value="#(s.price)" class="form-control" required>
+		</div>
+		<div class="form-group">
+			<label>服务费率</label>
+			<input type="text" name="s.orderRate" value="#(s.orderRate)" class="form-control" required>
+		</div>
+		
+	  <button type="submit" class="btn btn-primary">提交</button>
+	</form>
+</body>
+</html>

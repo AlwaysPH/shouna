@@ -1,0 +1,79 @@
+#@layout('加盟商', 'customer_joininfo', '客户管理,加盟商')
+#define content()
+<div class="container-fluid">
+	<div class="panel">
+ 		<div class="panel-heading">
+  			<div class="panel-title">加盟商</div>
+   		</div>
+   		<div class="panel-body">
+   			<div class="table-tools" style="margin-bottom: 15px;">
+                <div class="pull-right" style="width: 250px;">
+                    <div class="input-group">
+                        <input type="text" id="search" class="form-control" placeholder="关键字">
+                        <span class="input-group-btn">
+                            <button id="searchBtn" class="btn btn-default" type="button">搜索</button>
+                        </span>
+                    </div>
+                </div>
+                <div class="tools-group">
+                    <button data-toggle="modal" data-target="#addJoinInfo" class="btn btn-primary"><i class="icon icon-plus-sign"></i> 新增</button>
+                    #@panel('addJoinInfo', '添加加盟商', '', '350px', '/admin/customer/joininfo/add')
+                    #@panel('editJoinInfo', '编辑加盟商', '', '350px', '')
+                </div>
+            </div>
+            
+            <div id="datagrid" class="datagrid datagrid-striped">
+            	<div class="datagrid-container table-responsive"></div>
+    			<div class="pager"></div>
+            </div>
+			<script type="text/javascript">
+			$(function(){
+				$('#datagrid').datagrid({
+					dataSource: {
+						cols: [
+                            {name: 'realname', label: '项目名称'},
+							{name: 'itemname', label: '加盟项目', width: 150},
+                            {name: 'text', label: '项目说明', width: 250},
+                            {name: 'telephone', label: '联系电话', width: 150},
+                            {name: 'recommend', label: '推介人', width: 150},
+							{label: '操作', html: true, width: 200, sort: false, valueOperator: {
+								getter: function(val, cell, datagrid) {
+									var id = cell.config.data.id;
+									var html = '<button class="btn btn-info btn-sm" onclick="panel(\'editJoinInfo\', \'/admin/customer/joininfo/edit/' + id + '\')">';
+									html    += '<i class="icon icon-edit"></i>编辑';
+									html    += '</button>';
+									html    += '&nbsp;&nbsp;';
+									html    += '<button class="btn btn-danger btn-sm" onclick="remove(\'/admin/customer/joininfo/delete/' + id + '\')">';
+									html    += '<i class="icon icon-trash"></i>删除';
+									html    += '</button>';
+									return html;
+								}
+							}}
+						],
+						remote: function(params) {
+							return {
+				           		url: '/admin/customer/joininfo/grid',
+				           		type: 'POST',
+				       			dataType: 'json'
+				            };
+						}
+					},
+					sortable: true,
+					states: {
+		                pager: {
+		                    page: 1,
+		                    recPerPage: 10
+		                }
+		            }
+				});
+				
+				$('#searchBtn').click(function(){
+					var datagrid = $('#datagrid').data('zui.datagrid');
+					datagrid.search($('#search').val().trim());
+				});
+			});
+			</script>
+   		</div>
+	</div>
+</div>
+#end

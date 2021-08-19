@@ -1,0 +1,127 @@
+#@layout('客户信息', 'customer_list', '客户管理,客户信息')
+#define content()
+<div class="container-fluid">
+	<div class="panel">
+		<div class="panel-heading">
+			<div class="panel-title">客户信息</div>
+		</div>
+		<div class="panel-body">
+			<div class="table-tools" style="margin-bottom: 15px;">
+				<div class="pull-right" style="width: 250px;">
+					<div class="input-group">
+						<input type="text" id="search" class="form-control" placeholder="关键字">
+						<span class="input-group-btn">
+                            <button id="searchBtn" class="btn btn-default" type="button">搜索</button>
+                        </span>
+					</div>
+				</div>
+				<div class="tools-group">
+					<a href="/admin/customer/list/index"><button data-toggle="modal" data-target="" class="btn btn-primary"><i class="icon icon-refresh"></i> 刷新</button></a>
+					#@panel('addJoinInfo', '添加', '', '350px', '')
+					#@panel('banCateg', '封号', '', '350px', '')
+<!--					#@panel('editPid', '上级设置', 'modal-lg', '550px', '')-->
+					#@panel('editLevel', '等级设置', 'modal-lg', '550px', '')
+				</div>
+			</div>
+
+			<div id="datagrid" class="datagrid datagrid-striped">
+				<div class="datagrid-container table-responsive"></div>
+				<div class="pager"></div>
+			</div>
+			<script type="text/javascript">
+				$(function(){
+					$('#datagrid').datagrid({
+						dataSource: {
+							cols: [
+								{name: 'username', label: '用户名'},
+								{name: 'nickname', label: '昵称', width: 100},
+								{name: 'headimg', label: '图片', html: true, sort: false, width: 100, valueOperator: {
+										getter: function(val, cell, datagrid) {
+											if (val) {
+												return '<img style="margin:0px;height:20px;border:1px solid #ccc;" src="' + val + '"/>';
+											}
+											return '暂无图片';
+										}
+									}},
+								{name: 'telphone', label: '手机号码', width: 120},
+								{name: 'balance', label: '余额', width: 150},
+								{name: 'totalOrder', label: '总下单数', width: 150},
+								{name: 'totalMoney', label: '总下单金额', width: 150},
+								{name: 'title', label: '等级名称', width: 100},
+								{name: 'pid', label: '上级', width: 100},
+								{name: 'status', label: '状态', html: true, sort: false, width: 100, valueOperator: {
+										getter: function(val, cell, datagrid) {
+											if (val == 0) {
+												return '正常';
+											}else if (val == 1) {
+												return '禁用';
+											}
+										}
+									}},
+								/* {name: 'type', label: '客户类别', html: true, sort: false, width: 150, valueOperator: {
+										getter: function(val, cell, datagrid) {
+											if (val == 0) {
+												return '客户';
+											}else if (val == 1) {
+												return '整理师';
+											}
+										}
+									}}, */
+								{name: 'regip', label: '注册ip', width: 150},
+								{name: 'regtime', label: '注册时间', width: 150},
+								{label: '操作', html: true, width: 280, sort: false, valueOperator: {
+										getter: function(val, cell, datagrid) {
+											var id = cell.config.data.id;
+											var html;
+											if (cell.config.data.status == 0) {
+												html = '<button class="btn btn-danger btn-sm" onclick="panel(\'banCateg\', \'/admin/customer/list/ban/' + id + '\')">';
+												html += '<i class="icon icon-lock"></i> 封号';
+												html += '</button>';
+												html += '&nbsp;&nbsp;';
+												html += '<button class="btn btn-warning btn-sm" onclick="panel(\'banCateg\', \'/admin/customer/list/joinArranger/' + id + '\')">';
+												html += '<i class="icon icon-exchange"></i> 转整理师';
+												html += '</button>';
+												// html += '&nbsp;&nbsp;';
+												// html += '<button class="btn btn-info btn-sm" onclick="panel(\'editPid\', \'/admin/customer/list/editPid/' + id + '\')">';
+												// html += '<i class="icon icon-cog"></i> 上级设置';
+												// html += '</button>'
+												html += '&nbsp;&nbsp;';
+												html += '<button class="btn btn-info btn-sm" onclick="panel(\'editLevel\', \'/admin/customer/list/editLevel/' + id + '\')">';
+												html += '<i class="icon icon-cog"></i> 等级设置';
+												html += '</button>'
+											} else {
+												html = '<button class="btn btn-primary btn-sm" onclick="panel(\'banCateg\', \'/admin/customer/list/noban/' + id + '\')">';
+												html += '<i class="icon icon-key"></i> 解禁';
+												html += '</button>'
+											}
+											return html;
+										}
+									}}
+							],
+							remote: function(params) {
+								return {
+									url: '/admin/customer/list/grid',
+									type: 'POST',
+									dataType: 'json'
+								};
+							}
+						},
+						sortable: true,
+						states: {
+							pager: {
+								page: 1,
+								recPerPage: 10
+							}
+						}
+					});
+
+					$('#searchBtn').click(function(){
+						var datagrid = $('#datagrid').data('zui.datagrid');
+						datagrid.search($('#search').val().trim());
+					});
+				});
+			</script>
+		</div>
+	</div>
+</div>
+#end

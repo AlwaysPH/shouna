@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>管理员登录</title>
+    <link rel="stylesheet" href="/assets/zui/css/zui.min.css">
+    <link rel="stylesheet" href="/assets/zui/theme/blue.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <script src="/assets/zui/lib/jquery/jquery.js"></script>
+    <script src="/assets/zui/lib/jquery/jquery.form.min.js"></script>
+    <script type="text/javascript">
+    $(function(){
+    	if (window != window.parent) {
+			window.parent.location.reload();
+			return;
+		}
+    	
+    	$('#loginForm').submit(function(){
+    		$(this).ajaxSubmit(function(r){
+    			if (r.state == 'ok') {
+    				location.href = '/admin';
+    			} else {
+    				$('#captcha').attr('src', '/admin/account/captcha?' + Math.random());
+    				$('#vcode').val('');
+    				new $.zui.Messager(r.msg, {
+    					type: 'danger',
+    			        icon: 'exclamation-sign'
+    			    }).show();
+    			}
+    		});
+    		return false;
+    	});
+    });
+    </script>
+</head>
+<body class="bg-primary" style="height: auto; min-height: 100%; padding-top:50px;">
+    <div class="page page-login text-center">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="logo">
+                    <a href="#">整么样后台管理系统</a>
+                </div>
+                <form id="loginForm" method="post" onsubmit="">
+                    <div class="form-group">
+                    	<input type="text" name="username" required autocomplete="off" class="form-control" placeholder="ID/帐号">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="password" required autocomplete="off" class="form-control" placeholder="密码">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="vcode" id="vcode" required autocomplete="off" class="form-control" placeholder="验证码" maxlength="4" style="width:150px;float:left;">
+                        <img title="点击更换验证码" src="/admin/account/captcha" id="captcha" style="float:right;height:35px;cursor: pointer;" onclick="this.src='/admin/account/captcha?' + Math.random();">
+                    </div>
+                    <br />
+                    <button type="submit" id="loginBtn" class="btn btn-lg btn-primary btn-block" style="margin-top: 30px;">登录</button>
+                </form>
+            </div>
+        </div>
+        <footer class="page-copyright page-copyright-inverse">
+            <p>WEBSITE BY 唐小恕</p>
+            <p>© 2021. All RIGHT RESERVED.</p>
+        </footer>
+    </div>
+    <script src="/assets/zui/js/zui.min.js"></script>
+    <script src="/assets/js/app.js"></script>
+</body>
+</html>

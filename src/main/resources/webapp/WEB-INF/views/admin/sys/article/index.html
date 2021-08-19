@@ -1,0 +1,92 @@
+#@layout('文章管理', 'sys_article', '系统设置,文章管理')
+#define content()
+<div class="container-fluid">
+	<div class="panel">
+ 		<div class="panel-heading">
+  			<div class="panel-title">文章管理</div>
+   		</div>
+   		<div class="panel-body">
+   			<div class="table-tools" style="margin-bottom: 15px;">
+                <div class="pull-right" style="width: 250px;">
+                    <div class="input-group">
+                        <input type="text" id="search" class="form-control" placeholder="关键字">
+                        <span class="input-group-btn">
+                            <button id="searchBtn" class="btn btn-default" type="button">搜索</button>
+                        </span>
+                    </div>
+                </div>
+                <div class="tools-group">
+                    <button data-toggle="modal" data-target="#addArticle" class="btn btn-primary"><i class="icon icon-plus-sign"></i> 新增</button>
+                    #@panel('addArticle', '添加文章', '', '440px', '/admin/sys/article/add')
+                    #@panel('editArticle', '编辑文章', '', '380px', '')
+                </div>
+            </div>
+            
+            <div id="datagrid" class="datagrid datagrid-striped">
+            	<div class="datagrid-container table-responsive"></div>
+    			<div class="pager"></div>
+            </div>
+			<script type="text/javascript">
+			$(function(){
+				$('#datagrid').datagrid({
+					dataSource: {
+						cols: [
+							{name: 'title', label: '标题'},
+                            {name: 'img', label: '图片', html: true, sort: false, width: 100, valueOperator: {
+                                    getter: function(val, cell, datagrid) {
+                                        if (val) {
+                                            return '<img style="margin:0px;height:20px;border:1px solid #ccc;" src="' + val + '"/>';
+                                        }
+                                        return '暂无图片';
+                                    }
+                                }},
+							{name: 'author', label: '作者', width: 150},
+                            {label: '内容', html: true, width: 100, sort: false, valueOperator: {
+                                    getter: function(val, cell, datagrid) {
+                                        var id = cell.config.data.id;
+                                        return '<a class="btn btn-link btn-sm" onclick="window.open(\'/admin/sys/article/content/' + id + '\',\'_blank\', \'resizable=no, scrollbars=no, titlebar=no, width=800, height=500, left=300\')">编辑内容</a>';
+                                    }
+                                }},
+                            {name: 'addtime', label: '添加时间', width: 150},
+                            {name: 'lasttime', label: '修改时间', width: 150},
+							{label: '操作', html: true, width: 200, sort: false, valueOperator: {
+								getter: function(val, cell, datagrid) {
+									var id = cell.config.data.id;
+									var html = '<button class="btn btn-info btn-sm" onclick="panel(\'editArticle\', \'/admin/sys/article/edit/' + id + '\')">';
+									html    += '<i class="icon icon-edit"></i>编辑';
+									html    += '</button>';
+									html    += '&nbsp;&nbsp;';
+									html    += '<button class="btn btn-danger btn-sm" onclick="remove(\'/admin/sys/article/delete/' + id + '\')">';
+									html    += '<i class="icon icon-trash"></i>删除';
+									html    += '</button>';
+									return html;
+								}
+							}}
+						],
+						remote: function(params) {
+							return {
+				           		url: '/admin/sys/article/grid',
+				           		type: 'POST',
+				       			dataType: 'json'
+				            };
+						}
+					},
+					sortable: true,
+					states: {
+		                pager: {
+		                    page: 1,
+		                    recPerPage: 10
+		                }
+		            }
+				});
+				
+				$('#searchBtn').click(function(){
+					var datagrid = $('#datagrid').data('zui.datagrid');
+					datagrid.search($('#search').val().trim());
+				});
+			});
+			</script>
+   		</div>
+	</div>
+</div>
+#end

@@ -1,0 +1,126 @@
+#@layout('首页', '', '仪表盘')
+#define content()
+<div class="container-fluid">
+	<div class="row">
+	    <div class="col-md-3 col-sm-6 col-xs-12">
+	        <div class="info-box bg-info">
+	            <div class="info-box-icon">
+	                <i class="icon icon-file-text"></i>
+	            </div>
+	            <div class="info-box-content">
+	                <span class="info-box-text">产品总量</span>
+	                <span class="info-box-number">#(itemCounts)
+	                    <small>个</small>
+	                </span>
+	            </div>
+	        </div>
+	    </div>
+	    <div class="col-md-3 col-sm-6 col-xs-12">
+	        <div class="info-box bg-primary">
+	            <div class="info-box-icon">
+	                <i class="icon icon-user"></i>
+	            </div>
+	            <div class="info-box-content">
+	                <span class="info-box-text">用户总量</span>
+	                <span class="info-box-number">#(customerCouts)
+	                    <small>个</small>
+	                </span>
+	            </div>
+	        </div>
+	    </div>
+<!--	    <div class="col-md-3 col-sm-6 col-xs-12">-->
+<!--	        <div class="info-box bg-warning">-->
+<!--	            <div class="info-box-icon">-->
+<!--	                <i class="icon icon-bars"></i>-->
+<!--	            </div>-->
+<!--	            <div class="info-box-content">-->
+<!--	                <span class="info-box-text">加盟总量</span>-->
+<!--	                <span class="info-box-number">#(joininfoCounts)-->
+<!--	                    <small>个</small>-->
+<!--	                </span>-->
+<!--	            </div>-->
+<!--	        </div>-->
+<!--	    </div>-->
+	    <div class="col-md-3 col-sm-6 col-xs-12">
+	        <div class="info-box bg-danger">
+	            <div class="info-box-icon">
+	                <i class="icon icon-eye-open"></i>
+	            </div>
+	            <div class="info-box-content">
+	                <span class="info-box-text">订单总量</span>
+	                <span class="info-box-number">#(orderCounts)
+	                    <small>单</small>
+	                </span>
+	            </div>
+	        </div>
+	    </div>
+		<div class="col-md-3 col-sm-6 col-xs-12">
+			<div class="info-box bg-danger">
+				<div class="info-box-icon">
+					<i class="icon icon-eye-open"></i>
+				</div>
+				<div class="info-box-content">
+					<span class="info-box-text">订单总额</span>
+					<span class="info-box-number">#(amount)
+	                    <small>元</small>
+	                </span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<div class="row">
+        <div class="col-md-6">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div class="panel-title">产品信息</div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-info">
+                        <tr>
+                            <td>产品名称</td>
+                            <td>整么样后台管理系统v1.0</td>
+                        </tr>
+                        <tr>
+                            <td>核心框架</td>
+                            <td>jdk v1.8.0</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div class="panel-title">服务器信息</div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-info">
+                        <tr>
+                            <td>操作系统</td>
+                            <td>Windows</td>
+                        </tr>
+                        <tr>
+                            <td>运行环境</td>
+                            <td>nginx/1.4.6</td>
+                        </tr>
+                        <tr>
+                            <td>JDK版本</td>
+                            <td>1.8.0_221</td>
+                        </tr>
+                        <tr>
+                            <td>MYSQL版本</td>
+                            <td>5.7</td>
+                        </tr>
+                        <tr>
+                            <td>上传限制</td>
+                            <td>20M</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+#end

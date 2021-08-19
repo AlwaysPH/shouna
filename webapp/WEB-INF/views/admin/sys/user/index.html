@@ -1,0 +1,86 @@
+#@layout('系统用户', 'sys_user', '系统设置,系统用户')
+#define content()
+<div class="container-fluid">
+	<div class="panel">
+ 		<div class="panel-heading">
+  			<div class="panel-title">系统用户信息</div>
+   		</div>
+   		<div class="panel-body">
+   			<div class="table-tools" style="margin-bottom: 15px;">
+                <div class="pull-right" style="width: 250px;">
+                    <div class="input-group">
+                        <input type="text" id="search" class="form-control" placeholder="关键字">
+                        <span class="input-group-btn">
+                            <button id="searchBtn" class="btn btn-default" type="button">搜索</button>
+                        </span>
+                    </div>
+                </div>
+                <div class="tools-group">
+                    <button data-toggle="modal" data-target="#addUser" class="btn btn-primary"><i class="icon icon-plus-sign"></i> 新增</button>
+                    #@panel('addUser', '添加系统用户', '', '410px', '/admin/sys/user/add')
+                    #@panel('editUser', '编辑系统用户', '', '410px', '')
+                </div>
+            </div>
+            
+            <div id="datagrid" class="datagrid datagrid-striped">
+            	<div class="datagrid-container table-responsive"></div>
+    			<div class="pager"></div>
+            </div>
+			<script type="text/javascript">
+			$(function(){
+				$('#datagrid').datagrid({
+					dataSource: {
+						cols: [
+							{name: 'username', label: '用户名'},
+							{name: 'realname', label: '姓名', width: 150},
+							{name: 'headimg', label: '头像', html: true, sort: false, width: 100, valueOperator: {
+								getter: function(val, cell, datagrid) {
+									if (val) {
+										return '<img style="margin:0px;height:20px;border:1px solid #ccc;" src="' + val + '"/>';
+									}
+									return '暂无图片';
+								}
+							}},
+							{name: 'roles', label: '角色', width: 150},
+                            {name: 'status', label: '状态', width: 150},
+							{label: '操作', html: true, width: 200, sort: false, valueOperator: {
+								getter: function(val, cell, datagrid) {
+									var id = cell.config.data.id;
+									var html = '<button class="btn btn-info btn-sm" onclick="panel(\'editUser\', \'/admin/sys/user/edit/' + id + '\')">';
+									html    += '<i class="icon icon-edit"></i>编辑';
+									html    += '</button>';
+									html    += '&nbsp;&nbsp;';
+									html    += '<button class="btn btn-danger btn-sm" onclick="remove(\'/admin/sys/user/delete/' + id + '\')">';
+									html    += '<i class="icon icon-trash"></i>删除';
+									html    += '</button>';
+									return html;
+								}
+							}}
+						],
+						remote: function(params) {
+							return {
+				           		url: '/admin/sys/user/grid',
+				           		type: 'POST',
+				       			dataType: 'json'
+				            };
+						}
+					},
+					sortable: true,
+					states: {
+		                pager: {
+		                    page: 1,
+		                    recPerPage: 10
+		                }
+		            }
+				});
+				
+				$('#searchBtn').click(function(){
+					var datagrid = $('#datagrid').data('zui.datagrid');
+					datagrid.search($('#search').val().trim());
+				});
+			});
+			</script>
+   		</div>
+	</div>
+</div>
+#end

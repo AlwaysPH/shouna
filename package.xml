@@ -1,0 +1,45 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+
+	<id>release</id>
+
+	<formats>
+		<format>dir</format>
+		<format>zip</format>
+	</formats>
+
+	<includeBaseDirectory>true</includeBaseDirectory>
+
+	<fileSets>
+		<fileSet>
+			<directory>${basedir}/src/main/resources</directory>
+			<outputDirectory>config</outputDirectory>
+			<excludes>
+				<exclude>webapp</exclude>
+			</excludes>
+		</fileSet>
+
+		<fileSet>
+			<directory>${basedir}/src/main/resources/webapp</directory>
+			<outputDirectory>webapp</outputDirectory>
+		</fileSet>
+
+		<fileSet>
+			<directory>${basedir}</directory>
+			<outputDirectory></outputDirectory>
+			<fileMode>755</fileMode>
+			<includes>
+				<include>*.sh</include>
+				<include>*.bat</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>lib</outputDirectory>
+		</dependencySet>
+	</dependencySets>
+
+</assembly>

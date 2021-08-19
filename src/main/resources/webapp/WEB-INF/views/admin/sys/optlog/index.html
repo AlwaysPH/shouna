@@ -1,0 +1,66 @@
+#@layout('操作日志', 'sys_optlog', '系统设置,操作日志')
+#define content()
+<div class="container-fluid">
+	<div class="panel">
+		<div class="panel-heading">
+			<div class="panel-title">操作日志</div>
+		</div>
+		<div class="panel-body">
+			<div class="table-tools" style="margin-bottom: 15px;">
+				<div class="pull-right" style="width: 250px;">
+					<div class="input-group">
+						<input type="text" id="search" class="form-control" placeholder="关键字">
+						<span class="input-group-btn">
+                            <button id="searchBtn" class="btn btn-default" type="button">搜索</button>
+                        </span>
+					</div>
+				</div>
+				<div class="tools-group">
+					<a style="color: white" href="/admin/sys/optlog/index"><button data-toggle="modal" data-target="" class="btn btn-primary"><i class="icon icon-refresh"></i> 刷新</button></a>
+					#@panel('addJoinInfo', '添加', '', '350px', '')
+					#@panel('editJoinInfo', '编辑', '', '350px', '')
+				</div>
+			</div>
+
+			<div id="datagrid" class="datagrid datagrid-striped">
+				<div class="datagrid-container table-responsive"></div>
+				<div class="pager"></div>
+			</div>
+			<script type="text/javascript">
+				$(function(){
+					$('#datagrid').datagrid({
+						dataSource: {
+							cols: [
+								{name: 'optType', label: '操作类型'},
+								{name: 'optContent', label: '操作内容', width: 150},
+								{name: 'ip', label: 'ip地址', width: 150},
+								{name: 'cusomerId', label: '操作人id', width: 150},
+								{name: 'optTime', label: '时间', width: 150}
+							],
+							remote: function(params) {
+								return {
+									url: '/admin/sys/optlog/grid',
+									type: 'POST',
+									dataType: 'json'
+								};
+							}
+						},
+						sortable: true,
+						states: {
+							pager: {
+								page: 1,
+								recPerPage: 10
+							}
+						}
+					});
+
+					$('#searchBtn').click(function(){
+						var datagrid = $('#datagrid').data('zui.datagrid');
+						datagrid.search($('#search').val().trim());
+					});
+				});
+			</script>
+		</div>
+	</div>
+</div>
+#end

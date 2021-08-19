@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+#@meta('添加用户等级')
+</head>
+<body style="padding:15px;">
+	<form class="form-condensed" method="post" action="/admin/customer/joininfo/save">
+		<div class="form-group">
+			<label class="required">项目名称</label>
+			<input type="text" name="c.realname"  class="form-control" required>
+		</div>
+		<div class="form-group">
+			<label class="required">加盟项目</label>
+			<input type="text" name="c.itemname" class="form-control" required>
+		</div>
+		<div class="form-group">
+			<label class="required">加盟说明</label>
+			<input type="text" name="c.text" class="form-control" required>
+		</div>
+		<div class="form-group">
+			<label class="required">联系电话</label>
+			<input type="text" name="c.telephone"  class="form-control" required>
+		</div>
+		<div class="form-group">
+			<label class="required">推介人</label>
+			<input type="text" name="c.recommend"  class="form-control" required>
+		</div>
+	  <button type="submit" class="btn btn-primary">提交</button>
+	</form>
+</body>
+</html>

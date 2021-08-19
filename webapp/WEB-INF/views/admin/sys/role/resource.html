@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+#@meta('权限设置')
+</head>
+<body style="padding:15px;">
+<form class="form-condensed" method="post" action="/admin/sys/role/saveRes">
+#for(g : gs)
+<fieldset>
+	<legend>#(g.title)</legend>
+	<div class="form-group">
+	  #for(r : rList)
+		  #if(r.group_id == g.id)
+		  <label class="checkbox-inline">
+		    <input name="rcode" id="#(r.code)" type="checkbox" value="#(r.code)"> #(r.name)
+		  </label>
+		  #end
+	  #end
+	</div>
+</fieldset>
+#end
+
+<input type="hidden" name="rid" value="#(rid)"/>
+
+<button class="btn btn-sm btn-primary" type="submit">保存</button>
+
+<script type="text/javascript">
+$(function(){
+	#for(r : rs)
+	$('##(r)').attr('checked', 'checked');
+	#end
+});
+</script>
+</form>
+</body>
+</html>

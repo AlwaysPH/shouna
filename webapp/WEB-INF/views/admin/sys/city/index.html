@@ -1,0 +1,83 @@
+#@layout('地址', 'sys_city', '地址管理,地址')
+#define content()
+<div class="container-fluid">
+	<div class="panel">
+		<div class="panel-heading">
+			<div class="panel-title">地址信息</div>
+		</div>
+		<div class="panel-body">
+			<div class="table-tools" style="margin-bottom: 15px;">
+				<div class="pull-right" style="width: 250px;">
+					<div class="input-group">
+						<input type="text" id="search" class="form-control" placeholder="关键字">
+						<span class="input-group-btn">
+                            <button id="searchBtn" class="btn btn-default" type="button">搜索</button>
+                        </span>
+					</div>
+				</div>
+				<div class="tools-group">
+					<a style="color: white" href="/admin/sys/city/index">
+						<button data-toggle="modal" data-target="" class="btn btn-primary">
+							<i class="icon icon-refresh"></i> 刷新
+						</button>
+					</a>
+					#@panel('addCity', '添加城市', '', '350px', '')
+                    #@panel('editCity', '编辑城市', '', '350px', '')
+				</div>
+			</div>
+
+			<div id="datagrid" class="datagrid datagrid-striped">
+				<div class="datagrid-container table-responsive"></div>
+				<div class="pager"></div>
+			</div>
+			<script type="text/javascript">
+				$(function(){
+					$('#datagrid').datagrid({
+						dataSource: {
+							cols: [
+								{name: 'id', label: 'id'},
+								{name: 'name', label: '城市'},
+								{name: 'englishName', label: '城市英文名'},
+								{name: 'price', label: '上门费'},
+								{name: 'orderRate', label: '服务费率'},
+								{label: '操作', html: true, sort: false, valueOperator: {
+									getter: function(val, cell, datagrid) {
+										var id = cell.config.data.id;
+										var html = '<button class="btn btn-info btn-sm" onclick="panel(\'editCity\', \'/admin/sys/city/edit/' + id + '\')">';
+										html    += '<i class="icon icon-edit"></i>编辑';
+										html    += '</button>';
+										html    += '&nbsp;&nbsp;';
+										html    += '<button class="btn btn-danger btn-sm" onclick="remove(\'/admin/sys/city/delete/' + id + '\')">';
+										html    += '<i class="icon icon-trash"></i>删除';
+										html    += '</button>';
+										return html;
+									}
+								}}
+							],
+							remote: function(params) {
+								return {
+									url: '/admin/sys/city/grid',
+									type: 'POST',
+									dataType: 'json'
+								};
+							}
+						},
+						sortable: true,
+						states: {
+							pager: {
+								page: 1,
+								recPerPage: 10
+							}
+						}
+					});
+
+					$('#searchBtn').click(function(){
+						var datagrid = $('#datagrid').data('zui.datagrid');
+						datagrid.search($('#search').val().trim());
+					});
+				});
+			</script>
+		</div>
+	</div>
+</div>
+#end

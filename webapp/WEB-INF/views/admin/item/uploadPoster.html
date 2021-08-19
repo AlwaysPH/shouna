@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+#@meta('视频上传')
+</head>
+<body style="padding:15px;">
+	<form class="form-condensed" method="post" enctype="multipart/form-data" action="/admin/item/savePoster">
+		<input type="hidden" name="id" value="#(id)">
+		<div class="form-group">
+			<label>图片地址</label>
+			<input type="file" name="sharingUrl" class="form-control" >
+		</div>
+	  <button type="submit" class="btn btn-primary">提交</button>
+	</form>
+</body>
+</html>

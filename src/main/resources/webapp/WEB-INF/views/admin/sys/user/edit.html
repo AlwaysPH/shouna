@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+#@meta('编辑系统用户')
+</head>
+<body style="padding:15px;">
+	<form class="form-condensed" method="post" enctype="multipart/form-data" action="/admin/sys/user/save">
+		<div class="form-group">
+			<label class="required">用户名</label>
+			<input type="text" name="s.username" value="#(s.username)" class="form-control" required>
+			<input type="hidden" name="s.id" value="#(s.id)" class="form-control" required>
+		</div>
+		<div class="form-group">
+			<label>姓名</label>
+			<input type="text" name="s.realname" value="#(s.realname)" class="form-control" required>
+		</div>
+		<div class="form-group">
+			<label class="required">密码</label>
+			<input type="text" name="s.password" value="#(s.password)" class="form-control" required>
+		</div>
+		<div class="form-group">
+			<label>头像</label>
+			<input type="file" name="headimg" value="#(s.headimg)" class="form-control" >
+		</div>
+		<div class="form-group">
+			<label>角色</label>
+			<select name="s.roles" class="form-control">
+				<option value="">所有分组</option>
+				#for(c : rs)
+				<option value="#(c.code)">#(c.code)</option>
+				#end
+			</select>
+		</div>
+		<div class="form-group">
+			<label>状态</label>
+			<select name="s.status" class="form-control">
+				<option value="">所有分组</option>
+				<option value="正常">正常</option>
+				<option value="异常">异常</option>
+			</select>
+		</div>
+	  <button type="submit" class="btn btn-primary">提交</button>
+	</form>
+</body>
+</html>

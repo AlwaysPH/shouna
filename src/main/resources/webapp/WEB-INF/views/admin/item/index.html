@@ -1,0 +1,93 @@
+#@layout('产品列表', 'item_list', '业务中心,产品列表')
+#define content()
+<div class="container-fluid">
+	<div class="panel">
+ 		<div class="panel-heading">
+  			<div class="panel-title">产品列表</div>
+   		</div>
+   		<div class="panel-body">
+   			<div class="table-tools" style="margin-bottom: 15px;">
+                <div class="pull-right" style="width: 450px;">
+                    <div class="input-group">
+                    	<!-- 
+                    	<select id="categ_id" class="form-control">
+                    		<option value="">所有分类</option>
+                    		#for(c : cs)
+						    <option value="#(c.id)">#(c.name)</option>
+						    #end
+						</select>
+						-->
+                    	<span class="input-group-addon fix-border fix-padding"></span>
+                        
+                        <input type="text" id="search" class="form-control" placeholder="关键字">
+                        <span class="input-group-btn">
+                            <button id="searchBtn" class="btn btn-default" type="button">搜索</button>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="tools-group">
+                    <button data-toggle="modal" data-target="#addCateg" class="btn btn-primary"><i class="icon icon-plus-sign"></i> 新增</button>
+                    #@panel('addCateg', '添加产品信息', '', '650px', '/admin/item/add')
+                    #@panel('editCateg', '编辑产品信息', '', '650px', '')
+                </div>
+            </div>
+            
+            <div id="datagrid" class="datagrid datagrid-striped">
+            	<div class="datagrid-container table-responsive"></div>
+    			<div class="pager"></div>
+            </div>
+            <script type="text/javascript">
+			$(function(){
+				$('#datagrid').datagrid({
+					dataSource: {
+						cols: [
+							{name: 'cname', label: '项目分类', width: 150},
+							{name: 'code', label: '代码', width: 100},
+							{name: 'name', label: '项目名称'},
+							{name: 'saleAmount', label: '价格', width: 150},
+							{name: 'commissionRate', label: '返佣比例', width: 150},
+							{label: '操作', html: true, width: 200, sort: false, valueOperator: {
+								getter: function(val, cell, datagrid) {
+									var id = cell.config.data.id;
+									var html = '<button class="btn btn-info btn-sm" onclick="panel(\'editCateg\', \'/admin/item/edit/' + id + '\')">';
+									html    += '<i class="icon icon-edit"></i>编辑';
+									html    += '</button>';
+									html    += '&nbsp;&nbsp;';
+									html    += '<button class="btn btn-danger btn-sm" onclick="remove(\'/admin/item/delete/' + id + '\')">';
+									html    += '<i class="icon icon-trash"></i>删除';
+									html    += '</button>';
+									return html;
+								}
+							}}
+						],
+						remote: function(params) {
+							// params.cid = $('#categ_id').val();
+							return {
+				           		url: '/admin/item/grid',
+				           		type: 'POST',
+				       			dataType: 'json'
+				            };
+						}
+					},
+					sortable: true,
+					states: {
+		                pager: {
+		                    page: 1,
+		                    recPerPage: 10
+		                }
+		            }
+				});
+				
+				$('#searchBtn').click(function(){
+					var datagrid = $('#datagrid').data('zui.datagrid');
+					datagrid.search($('#search').val().trim());
+				});
+			});
+			</script>
+		</div>
+	</div>
+</div>
+
+
+#end

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+#@meta('商品详情图上传')
+</head>
+<body style="padding:15px;">
+	<form class="form-condensed" method="post" enctype="multipart/form-data" action="/admin/item/saveItemDetail">
+		<input type="hidden" name="id" value="#(id)">
+		<div class="form-group">
+			<label>图片地址</label>
+			<input type="file" multiple="multiple" name="text" class="form-control" >
+		</div>
+		<div class="form-group">
+			<label>是否覆盖原有图片</label>
+			<select name="isCover" class="form-control">
+				<option value="0">否</option>
+				<option value="1">是</option>
+			</select>
+		</div>
+	  <button type="submit" class="btn btn-primary">提交</button>
+	</form>
+</body>
+</html>

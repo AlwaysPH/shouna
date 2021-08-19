@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+#@meta('等级设置')
+</head>
+<body style="padding:15px;">
+	<form class="form-condensed" method="post" action="/admin/customer/list/setLevel">
+		<div class="form-group">
+			<label class="required">昵称</label>
+			<input type="text" name="c.nickname" value="#(c.nickname)" class="form-control" required>
+			<input type="hidden" name="c.id" value="#(c.id)">
+		</div>
+		<div class="form-group">
+			<label>等级</label>
+			<select name="c.level_id" class="form-control">
+				<option value="#(c.level_id)">等级</option>
+				#for(s : cs)
+					#if(c.level_id == s.id)
+					<option value="#(s.id)" selected="selected">#(s.title)</option>
+					#else
+					<option value="#(s.id)">#(s.title)</option>
+					#end
+				#end
+			</select>
+		</div>
+		
+	</div>
+	  <button type="submit" class="btn btn-primary">提交</button>
+	</form>
+</body>
+</html>

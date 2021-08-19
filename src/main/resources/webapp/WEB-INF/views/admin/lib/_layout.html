@@ -1,0 +1,215 @@
+#define meta(title)
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>整么样后台管理系统#if(isNotEmpty(title)) - #(title)#end</title>
+	<link rel="stylesheet" href="/assets/zui/css/zui.min.css">
+	<link rel="stylesheet" href="/assets/css/app.css">
+	<script src="/assets/zui/lib/jquery/jquery.js"></script>
+	<script src="/assets/zui/lib/jquery/jquery.form.min.js"></script>
+	<script src="/assets/zui/js/zui.min.js"></script>
+    <script src="/assets/js/app.js"></script>
+    <link href="/assets/zui/lib/bootbox/bootbox.min.css" rel="stylesheet">
+	<script src="/assets/zui/lib/bootbox/bootbox.min.js"></script>
+    <link href="/assets/zui/lib/datagrid/zui.datagrid.min.css" rel="stylesheet">
+	<script src="/assets/zui/lib/datagrid/zui.datagrid.js?v=3"></script>
+	<script type="text/javascript">
+	$(document).ajaxError(function(event, xhr, options, exc){
+		new $.zui.Messager('网络异常：[' + xhr.status + '] ' + exc, {
+			type: 'danger',
+	        icon: 'exclamation-sign'
+	    }).show();
+	});
+	function showRet(ret) {
+		if (ret.state == 'ok') {
+			new $.zui.Messager('恭喜，操作成功!', {
+				type: 'success',
+		        icon: 'check'
+		    }).show();
+		} else {
+			var msg = '对不起，操作失败!';
+			if (ret.msg) {
+				msg += ret.msg;
+			}
+			new $.zui.Messager(msg, {
+				type: 'danger',
+		        icon: 'exclamation-sign'
+		    }).show();
+		}
+	}
+	</script>
+#end
+
+#define header()
+<header class="main-header">
+    <nav class="navbar navbar-fixed-top bg-primary">
+        <div class="navbar-header">
+            <a class="navbar-toggle" href="javascript:;" data-toggle="collapse" data-target=".navbar-collapse"><i class="icon icon-th-large"></i></a>
+            <a class="sidebar-toggle" href="javascript:;" data-toggle="push-menu"><i class="icon icon-bars"></i></a>
+            <a class="navbar-brand" href="#">
+                <span class="logo">整么样后台管理</span>
+                <span class="logo-mini">整</span> 
+            </a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav">
+                    <li><a href="javascript:;" data-toggle="push-menu"><i class="icon icon-bars"></i></a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="javascript:;">
+                            <span>
+                                <i class="icon icon-bell-alt"></i>
+                                <span class="label label-danger label-pill up">0</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <span>
+                                <i class="icon icon-envelope-alt"></i>
+                                <span class="label label-success label-pill up">0</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="javascript:;" data-toggle="dropdown">
+                        	<i class="icon icon-user"></i> #(getRealname()) <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">修改密码</a></li>
+                            <li><a href="#">清除缓存</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/admin/account/logout">退出登录</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+#end
+
+#define menu(code)
+<aside class="main-sidebar">
+    <section class="sidebar">
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">主要菜单</li>
+            <!-- 后台首页 -->
+            <li #if(isBlank(code)) class="active" #end>
+                <a href="/admin">
+                    <i class="icon icon-dashboard"></i> 
+                    <span>仪表盘</span>
+                    <span class="pull-right-container">
+                    </span>
+                </a>
+            </li>
+            <!-- 菜单项 -->
+            #for(m : menuList())
+            <li class="treeview">
+                <a href="javascript:;">
+                	#if(isBlank(m.icon))
+                		<i class="icon icon-file"></i> 
+                	#else
+                		<i class="icon #(m.icon)"></i> 
+                    #end
+                    <span>#(m.title)</span>
+                    <span class="pull-right-container">
+                        <i class="icon icon-angle-left"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                	#for(i : m.items)
+                		#if(isBlank(i.icon))
+                			<li #if(code == i.code) class="active" #end><a href="#(i.linkUrl)"><i class="icon icon-circle-blank"></i> #(i.name)</a></li>
+                		#else
+                			<li #if(code == i.code) class="active" #end><a href="#(i.linkUrl)"><i class="icon #(i.icon)"></i> #(i.name)</a></li>
+                		#end
+                    #end
+                </ul>
+            </li>
+            #end
+        </ul>
+    </section>
+</aside>
+#end
+
+
+#define layout(title, code, crumbs)
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+#@meta(title)
+<script type="text/javascript">
+function panel(id, url) {
+	$('#' + id).find('iframe').attr('src', url);
+	$('#' + id).modal({});
+}
+function remove(url) {
+	bootbox.confirm({
+		title: '温馨提醒',
+	    message: "您确认要删除该数据吗？删除后将无法恢复",
+	    callback: function (r) {
+	    	if (r) {
+	    		$.get(url, function(d){ showRet(d); });
+	    	}
+	    }
+	})
+}
+function relieve(url) {
+	bootbox.confirm({
+		title: '温馨提醒',
+	    message: "您确认要解除该整理师吗？解除后该整理师将转为客户",
+	    callback: function (r) {
+	    	if (r) {
+	    		$.get(url, function(d){ showRet(d); });
+	    	}
+	    }
+	})
+}
+</script>
+</head>
+<body>
+    <div class="wrapper">
+        #@header()
+        #@menu(code)
+        <div class="content-wrapper">
+            <div class="content-header">
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="icon icon-home"></i></a></li>
+                    #for(cb : split(crumbs, ','))
+                    	#if(for.last)
+                    		<li class="active">#(cb)</li>
+                    	#else
+                    		<li><a href="javascript:void(0);">#(cb)</a></li>
+                    	#end
+                    #end
+                </ul>
+            </div>
+            <div class="content-body">
+                #@content()
+            </div>
+        </div> 
+    </div>
+</body>
+</html>
+#end
+
+#define panel(id, title, size, height, url)
+<div id="#(id)" class="modal fade">
+  <div class="modal-dialog #(size)">
+   <div class="modal-content">
+     <div class="modal-header">
+       <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+       <h4 class="modal-title">#(title)</h4>
+     </div>
+     <div class="modal-body" style="padding:0px;">
+     	<iframe #if(isNotBlank(url)) src="#(url)" #end style="width:100%;height:#(height);margin:0px;padding:0px;border:0px;"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+#end
+
+

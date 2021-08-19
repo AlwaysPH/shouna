@@ -1,0 +1,79 @@
+#@layout('客户等级', 'customer_level', '客户管理,客户等级')
+#define content()
+<div class="container-fluid">
+	<div class="panel">
+ 		<div class="panel-heading">
+  			<div class="panel-title">客户等级</div>
+   		</div>
+   		<div class="panel-body">
+   			<div class="table-tools" style="margin-bottom: 15px;">
+                <div class="pull-right" style="width: 250px;">
+                    <div class="input-group">
+                        <input type="text" id="search" class="form-control" placeholder="关键字">
+                        <span class="input-group-btn">
+                            <button id="searchBtn" class="btn btn-default" type="button">搜索</button>
+                        </span>
+                    </div>
+                </div>
+                <div class="tools-group">
+                    <button data-toggle="modal" data-target="#addLevel" class="btn btn-primary"><i class="icon icon-plus-sign"></i> 新增</button>
+                    <a style="color: white" href="/admin/customer/level/index"><button data-toggle="modal" data-target="" class="btn btn-primary"><i class="icon icon-refresh"></i> 刷新</button></a>
+                    #@panel('addLevel', '添加等级标识', '', '350px', '/admin/customer/level/add')
+                    #@panel('editLevel', '编辑等级标识', '', '350px', '')
+                </div>
+            </div>
+            
+            <div id="datagrid" class="datagrid datagrid-striped">
+            	<div class="datagrid-container table-responsive"></div>
+    			<div class="pager"></div>
+            </div>
+			<script type="text/javascript">
+			$(function(){
+				$('#datagrid').datagrid({
+					dataSource: {
+						cols: [
+                            {name: 'titleEn', label: '等级名称英文'},
+							{name: 'level', label: '等级标识', width: 200},
+                            {name: 'title', label: '等级名称', width: 200},
+                            // {name: 'orderRate', label: '返佣率', width: 200},
+							{label: '操作', html: true, width: 200, sort: false, valueOperator: {
+								getter: function(val, cell, datagrid) {
+									var id = cell.config.data.id;
+									var html = '<button class="btn btn-info btn-sm" onclick="panel(\'editLevel\', \'/admin/customer/level/edit/' + id + '\')">';
+									html    += '<i class="icon icon-edit"></i>编辑';
+									html    += '</button>';
+									html    += '&nbsp;&nbsp;';
+									html    += '<button class="btn btn-danger btn-sm" onclick="remove(\'/admin/customer/level/delete/' + id + '\')">';
+									html    += '<i class="icon icon-trash"></i>删除';
+									html    += '</button>';
+									return html;
+								}
+							}}
+						],
+						remote: function(params) {
+							return {
+				           		url: '/admin/customer/level/grid',
+				           		type: 'POST',
+				       			dataType: 'json'
+				            };
+						}
+					},
+					sortable: true,
+					states: {
+		                pager: {
+		                    page: 1,
+		                    recPerPage: 10
+		                }
+		            }
+				});
+				
+				$('#searchBtn').click(function(){
+					var datagrid = $('#datagrid').data('zui.datagrid');
+					datagrid.search($('#search').val().trim());
+				});
+			});
+			</script>
+   		</div>
+	</div>
+</div>
+#end

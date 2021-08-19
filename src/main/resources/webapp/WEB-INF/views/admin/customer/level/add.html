@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+#@meta('添加用户等级')
+</head>
+<body style="padding:15px;">
+	<form class="form-condensed" method="post" action="/admin/customer/level/save">
+		<div class="form-group">
+			<label class="required">等级标识</label>
+			<input type="text" name="c.level"  class="form-control" required>
+		</div>
+		<div class="form-group">
+			<label class="required">等级英文名称</label>
+			<input type="text" name="c.title_en" class="form-control" required>
+		</div>
+		<div class="form-group">
+			<label class="required">等级名称</label>
+			<input type="text" name="c.title" class="form-control" required>
+		</div>
+<!--		<div class="form-group">-->
+<!--			<label class="required">返佣率</label>-->
+<!--			<input type="text" name="c.order_rate"  class="form-control" required>-->
+<!--		</div>-->
+	  <button type="submit" class="btn btn-primary">提交</button>
+	</form>
+</body>
+</html>

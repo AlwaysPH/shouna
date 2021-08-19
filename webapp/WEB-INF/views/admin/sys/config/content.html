@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+#@meta('添加系统配置内容')
+<script src="/assets/zui/lib/kindeditor/kindeditor.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	var editor = KindEditor.create('textarea.kindeditor', {
+	    basePath: '/assets/zui/lib/kindeditor/',
+	    allowFileManager : true,
+	    height: 400,
+	    bodyClass : 'article-content'
+	});
+	
+	$('#saveBtn').click(function(){
+		$.post('/admin/sys/config/saveContent', {
+			id : #(c.id),
+			content: editor.html()
+		}, function(r){
+			showRet(r);
+		});
+	});
+})
+</script>
+</head>
+<body style="padding:15px;">
+	<form class="form-condensed" action="/admin/sys/config/saveContent" method="post">
+	  <div class="form-group">
+	    <label>内容</label>
+	    <textarea id="content" name="content" class="form-control kindeditor">#(c.content)</textarea>
+	  </div>
+	  <button type="button" id="saveBtn" class="btn btn-primary">提交</button>
+	</form>
+</body>
+</html>

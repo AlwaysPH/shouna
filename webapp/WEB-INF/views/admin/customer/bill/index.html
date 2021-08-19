@@ -1,0 +1,64 @@
+#@layout('客户流水', 'customer_bill', '流水管理,客户流水')
+#define content()
+<div class="container-fluid">
+	<div class="panel">
+		<div class="panel-heading">
+			<div class="panel-title">流水信息</div>
+		</div>
+		<div class="panel-body">
+			<div class="table-tools" style="margin-bottom: 15px;">
+				<div class="pull-right" style="width: 250px;">
+					<div class="input-group">
+						<input type="text" id="search" class="form-control" placeholder="关键字">
+						<span class="input-group-btn">
+                            <button id="searchBtn" class="btn btn-default" type="button">搜索</button>
+                        </span>
+					</div>
+				</div>
+				<div class="tools-group">
+					<a style="color: white" href="/admin/customer/bill/index"><button data-toggle="modal" data-target="" class="btn btn-primary"><i class="icon icon-refresh"></i> 刷新</button></a>
+					#@panel('reflushJoinInfo', '添加', '', '350px', '')
+					#@panel('detailsOrder', '详情', 'modal-lg', '550px', '')
+				</div>
+			</div>
+
+			<div id="datagrid" class="datagrid datagrid-striped">
+				<div class="datagrid-container table-responsive"></div>
+				<div class="pager"></div>
+			</div>
+			<script type="text/javascript">
+				$(function(){
+					$('#datagrid').datagrid({
+						dataSource: {
+							cols: [
+								{name: 'nickname', label: '合伙人'},
+								{name: 'city', label: '城市名称'},
+								{name: 'amount', label: '金额'},
+							],
+							remote: function(params) {
+								return {
+									url: '/admin/customer/bill/grid',
+									type: 'POST',
+									dataType: 'json'
+								};
+							}
+						},
+						sortable: true,
+						states: {
+							pager: {
+								page: 1,
+								recPerPage: 10
+							}
+						}
+					});
+
+					$('#searchBtn').click(function(){
+						var datagrid = $('#datagrid').data('zui.datagrid');
+						datagrid.search($('#search').val().trim());
+					});
+				});
+			</script>
+		</div>
+	</div>
+</div>
+#end

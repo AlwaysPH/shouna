@@ -1,0 +1,93 @@
+#@layout('提现申请', 'customer_cashout', '客户管理,客户提现申请')
+#define content()
+<div class="container-fluid">
+	<div class="panel">
+		<div class="panel-heading">
+			<div class="panel-title">提现申请</div>
+		</div>
+		<div class="panel-body">
+			<div class="table-tools" style="margin-bottom: 15px;">
+				<div class="pull-right" style="width: 250px;">
+					<div class="input-group">
+						<input type="text" id="search" class="form-control" placeholder="关键字">
+						<span class="input-group-btn">
+                            <button id="searchBtn" class="btn btn-default" type="button">搜索</button>
+                        </span>
+					</div>
+				</div>
+				<div class="tools-group">
+					<a style="color: white" href="/admin/customer/cashapply/index">
+						<button data-toggle="modal" data-target="" class="btn btn-primary">
+							<i class="icon icon-refresh"></i> 刷新
+						</button>
+					</a>
+					#@panel('banCateg', '完成提现', '', '350px', '')
+				</div>
+			</div>
+
+			<div id="datagrid" class="datagrid datagrid-striped">
+				<div class="datagrid-container table-responsive"></div>
+				<div class="pager"></div>
+			</div>
+			<script type="text/javascript">
+				$(function(){
+					$('#datagrid').datagrid({
+						dataSource: {
+							cols: [
+								{name: 'accountName', label: '姓名',width: 100},
+								// {name: 'bankName', label: '银行名', width: 280},
+								// {name: 'cardNo', label: '卡号'},
+								{name: 'status', label: '状态', html: true, sort: true, width: 100, valueOperator: {
+									getter: function(val, cell, datagrid) {
+										if (val == 'wait') {
+											return '提现中';
+										}else if (val == 'finish') {
+											return '完成';
+										}
+									}
+								}},
+								{name: 'amount', label: '提现金额', width: 150},
+								{name: 'payAmount', label: '支付金额', width: 150},
+								{name: 'payNo', label: '交易编号', width: 280},
+								{name: 'addtime', label: '申请时间', width: 150},
+								{name: 'overtime', label: '结束时间', width: 150},
+								{label: '操作', html: true, width: 170, sort: false, valueOperator: {
+									getter: function(val, cell, datagrid) {
+										var id = cell.config.data.id;
+										var html;
+										if (cell.config.data.status == 'wait') {
+											html = '<button class="btn btn-danger btn-sm" onclick="panel(\'banCateg\', \'/admin/customer/cashapply/cashover/' + id + '\')">';
+											html += '<i class="icon icon-lock"></i>完成提现';
+											html += '</button>';
+										}
+										return html;
+									}
+								}}
+							],
+							remote: function(params) {
+								return {
+									url: '/admin/customer/cashapply/grid',
+									type: 'POST',
+									dataType: 'json'
+								};
+							}
+						},
+						sortable: true,
+						states: {
+							pager: {
+								page: 1,
+								recPerPage: 10
+							}
+						}
+					});
+
+					$('#searchBtn').click(function(){
+						var datagrid = $('#datagrid').data('zui.datagrid');
+						datagrid.search($('#search').val().trim());
+					});
+				});
+			</script>
+		</div>
+	</div>
+</div>
+#end
