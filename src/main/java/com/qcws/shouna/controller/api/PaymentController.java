@@ -655,7 +655,7 @@ public class PaymentController extends ApiController {
             //一级返利
             firstRebate(pcustomer, order, level, info, order_amt);
         }
-        if(pcustomer.getPid() != 0 && pcustomer.getPid() != null){
+        if(pcustomer.getPid() != null && pcustomer.getPid() != 0){
             pcustomer = customerInfoService.findById(pcustomer.getPid());
             level = customerLevelService.findById(pcustomer.getLevelId());
             //二级返利
@@ -714,11 +714,15 @@ public class PaymentController extends ApiController {
             }
         }
 
-        CustomerInfo partInfo = partList.get(0);
-        savebill(partInfo.getId(),"佣金",orderNo,"订单"+orderNo+"佣金",order_amt.multiply(new BigDecimal(info.getSecondPartnerRate()).divide(new BigDecimal(100))).setScale(2,BigDecimal.ROUND_HALF_UP));
+        if(CollectionUtils.isNotEmpty(partList)){
+            CustomerInfo partInfo = partList.get(0);
+            savebill(partInfo.getId(),"佣金",orderNo,"订单"+orderNo+"佣金",order_amt.multiply(new BigDecimal(info.getSecondPartnerRate()).divide(new BigDecimal(100))).setScale(2,BigDecimal.ROUND_HALF_UP));
+        }
 
-        CustomerInfo fInfo = fList.get(0);
-        savebill(fInfo.getId(),"佣金",orderNo,"订单"+orderNo+"佣金",order_amt.multiply(new BigDecimal(info.getSecondFranchiseeRate()).divide(new BigDecimal(100))).setScale(2,BigDecimal.ROUND_HALF_UP));
+        if(CollectionUtils.isNotEmpty(fList)){
+            CustomerInfo fInfo = fList.get(0);
+            savebill(fInfo.getId(),"佣金",orderNo,"订单"+orderNo+"佣金",order_amt.multiply(new BigDecimal(info.getSecondFranchiseeRate()).divide(new BigDecimal(100))).setScale(2,BigDecimal.ROUND_HALF_UP));
+        }
     }
 
     /**

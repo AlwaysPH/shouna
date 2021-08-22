@@ -148,7 +148,9 @@ public class MemberInfoController extends ApiController {
 			customerInfo.setNickname(nickName);
 			customerInfo.setLoginip(getIPAddress());
 			customerInfo.setLogintime(new Date());
-			customerInfo.setCity(city);
+			if(StringUtils.isEmpty(customerInfo.getCity())){
+				customerInfo.setCity(city);
+			}
 			customerInfoService.update(customerInfo);
 			info= customerInfo;
 		}
