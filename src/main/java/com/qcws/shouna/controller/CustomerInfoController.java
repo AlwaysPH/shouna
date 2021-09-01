@@ -160,7 +160,7 @@ public class CustomerInfoController extends JbootController {
         CustomerInfo customerInfo = getModel(CustomerInfo.class,"c");
         customerInfo.setTelphone(customerInfo.getTelphone());
         customerInfo.setIsService("1");
-        customerInfo.setType(2);
+        customerInfo.setType(1);
         boolean bool = customerInfo.saveOrUpdate();
         renderHtml(new MessageBox(bool).toString());
     }

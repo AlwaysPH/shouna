@@ -43,7 +43,7 @@ public class ApiAuthInterceptor implements Interceptor {
             noIncludeUrls.add("/api/address/citylist");
             noIncludeUrls.add("/api/mall/getMallProduct");
             noIncludeUrls.add("/api/mall/getProductDetail");
-//            noIncludeUrls.add("/api/myorder/orderList");
+//            noIncludeUrls.add("/api/myCustomer/getCustomerList");
             if (!noIncludeUrls.contains(inv.getActionKey())) {
             	ApiController controller = (ApiController) inv.getController();
                 HttpServletResponse response = controller.getResponse();

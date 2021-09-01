@@ -135,7 +135,11 @@ public class MemberInfoController extends ApiController {
 			customer.setNickname(nickName);
 			customer.setTelphone(randName);
 			customer.setSex(sex);
-			customer.setCity(city);
+			if(StringUtils.isEmpty(city)){
+				customerInfo.setCity("Changsha");
+			}else {
+				customer.setCity(city);
+			}
 			customer.setRegip(getIPAddress());
 			customer.setRegtime(new Date());
 			customer.setLoginip(getIPAddress());

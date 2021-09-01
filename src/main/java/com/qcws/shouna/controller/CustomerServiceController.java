@@ -32,7 +32,7 @@ public class CustomerServiceController extends JbootController {
         DbPageSearch dbPageSearch = DbPageSearch.instance(this);
         dbPageSearch.select("select * ");
         dbPageSearch.from("from customer_info ");
-        dbPageSearch.addExcept(" type = ?", DbPageSearch.EXIST_VAL, "2");
+        dbPageSearch.addExcept(" type = ?", DbPageSearch.EXIST_VAL, "1");
         dbPageSearch.addExcept(" and is_service = ?", DbPageSearch.EXIST_VAL, "1");
         dbPageSearch.addExcept(" and (username like ?", DbPageSearch.ALLLIKE);
         dbPageSearch.addExcept(" or nickname like ?", DbPageSearch.ALLLIKE);

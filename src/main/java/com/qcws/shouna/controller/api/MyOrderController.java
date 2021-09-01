@@ -144,7 +144,7 @@ public class MyOrderController extends ApiController{
 		JSONObject jsonObject = new JSONObject();
     	if(user!=null) {
 			Integer customerId = user.getId();
-			if(user.getType() == 2){
+			if(user.getType() == 1){
 				//若为客服
 				result = Db.find("select c.id id, c.customer_id customerId, c.order_no orderNo, c.item_id itemId, c.item_name itemName, " +
 						"c.price price, c.`status` status, c.settle_status settleStatus, c.commission commission, c.order_rate orderRate, " +

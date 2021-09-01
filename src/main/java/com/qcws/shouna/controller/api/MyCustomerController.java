@@ -1,6 +1,7 @@
 package com.qcws.shouna.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
@@ -11,9 +12,11 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,16 +44,16 @@ public class MyCustomerController extends ApiController{
         if(NEW_TYPE.equals(type)){
             infoList = Db.find("SELECT id,nickname,headimg FROM(SELECT t1.id, IF (find_in_set(pid, @pids) > 0, @pids := concat(@pids, ',', id), 0) AS ischild, t1.regtime,t1.nickname,t1.headimg FROM(SELECT id, pid, regtime, nickname, headimg FROM customer_info WHERE STATUS = '0' ORDER BY pid, id) t1, (SELECT @pids := ?) t2) t3 WHERE ischild != 0 and to_days(regtime) = to_days(now())", id);
             ids = getIdString(sb, infoList);
-            list = Db.find("select count(*) pcount,SUM(t.price) amount,MAX(t.overtime) time,t.customer_id customerId, c.nickname name, c.headimg headImg from customer_order t LEFT JOIN customer_info c on t.customer_id = c.id where t.customer_id in ("+ids+") and t.status = 'finish' and t.settle_status = 'finish' AND to_days(t.overtime) = to_days(now()) and to_days(t.addtime) = TO_DAYS(now()) GROUP BY t.customer_id");
+            list = Db.find("select count(*) pcount,SUM(t.deposit) deposit,SUM(final_amount) finalPrice,MAX(t.overtime) time,t.customer_id customerId, c.nickname name, c.headimg headImg from customer_order t LEFT JOIN customer_info c on t.customer_id = c.id where t.customer_id in ("+ids+") and t.settle_status = 'finish' AND to_days(t.overtime) = to_days(now()) and to_days(t.addtime) = TO_DAYS(now()) GROUP BY t.customer_id");
 //            page = Db.paginate(pageNum, pageSize, "select count(*) pcount,SUM(t.price) amount,MAX(t.overtime) time,t.customer_id customerId, c.nickname name, c.headimg headImg", "from customer_order t LEFT JOIN customer_info c on t.customer_id = c.id where t.customer_id in ("+ids+") and t.status = 'finish' and t.settle_status = 'finish' AND to_days(t.overtime) = to_days(now()) and to_days(t.addtime) = TO_DAYS(now()) GROUP BY t.customer_id");
         }else {
             infoList = Db.find("SELECT id,nickname,headimg FROM(SELECT t1.id, IF (find_in_set(pid, @pids) > 0, @pids := concat(@pids, ',', id), 0) AS ischild, t1.regtime,t1.nickname,t1.headimg FROM(SELECT id, pid, regtime, nickname, headimg FROM customer_info WHERE STATUS = '0' ORDER BY pid, id) t1, (SELECT @pids := ?) t2) t3 WHERE ischild != 0", id);
             ids = getIdString(sb, infoList);
-            list = Db.find("SELECT count(*) pcount, SUM(t.price) amount, MAX(t.overtime) time, t.customer_id customerId, c.nickname name, c.headimg headImg from customer_order t LEFT JOIN customer_info c on t.customer_id = c.id WHERE t.customer_id in ("+ids+") and t.status = 'finish' AND t.settle_status = 'finish' GROUP BY t.customer_id");
+            list = Db.find("SELECT count(*) pcount, SUM(t.deposit) amount,SUM(final_amount) finalPrice, MAX(t.overtime) time, t.customer_id customerId, c.nickname name, c.headimg headImg from customer_order t LEFT JOIN customer_info c on t.customer_id = c.id WHERE t.customer_id in ("+ids+") AND t.settle_status = 'finish' GROUP BY t.customer_id");
 //            page = Db.paginate(pageNum, pageSize, "select count(*) pcount,SUM(t.price) amount,MAX(t.overtime) time,t.customer_id customerId, c.nickname name, c.headimg headImg", "from customer_order t LEFT JOIN customer_info c on t.customer_id = c.id where t.customer_id in ("+ids+") and t.status = 'finish' and t.settle_status = 'finish' GROUP BY t.customer_id");
         }
-        dealwithData(infoList, list);
-        renderJson(Ret.ok("data",list));
+        List<Record> result = dealwithData(infoList, list);
+        renderJson(Ret.ok("data",result));
     }
 
     @ApiOperation(value = "新增和累计数",httpMethod = "GET")
@@ -64,9 +67,10 @@ public class MyCustomerController extends ApiController{
         renderJson(Ret.ok("data",result));
     }
 
-    private void dealwithData(List<Record> infoList, List<Record> list) {
+    private List<Record> dealwithData(List<Record> infoList, List<Record> list) {
+        List<Record> result = Lists.newArrayList();
         if(CollectionUtils.isEmpty(infoList)){
-            return;
+            return result;
         }
         if(CollectionUtils.isEmpty(list)){
             for(Record info : infoList){
@@ -77,24 +81,35 @@ public class MyCustomerController extends ApiController{
                 record.set("pcount", 0);
                 record.set("amount", new BigDecimal(0));
                 record.set("time", "");
-                list.add(record);
+                result.add(record);
             }
         }else {
-            List<Integer> idList = list.stream().map(e -> e.getInt("customerId")).collect(Collectors.toList());
-            for(Record info : infoList){
-                if(!idList.contains(info.get("id"))){
-                    Record record = new Record();
-                    record.set("name", info.getStr("nickname"));
-                    record.set("headImg", info.getStr("headimg"));
-                    record.set("customerId", info.getInt("id"));
-                    record.set("pcount", 0);
-                    record.set("amount", new BigDecimal(0));
-                    record.set("time", "");
-                    list.add(record);
-                }
+            for(Record info : list){
+                Record record = new Record();
+                record.set("name", info.getStr("name"));
+                record.set("headImg", info.getStr("headImg"));
+                record.set("customerId", info.getInt("customerId"));
+                record.set("pcount", info.get("pcount"));
+                record.set("amount", getFinal(info));
+                record.set("time", info.get("time"));
+                result.add(record);
             }
         }
+        return result;
     }
+
+    private BigDecimal getFinal(Record info) {
+        BigDecimal price = info.get("deposit");
+        BigDecimal finalPrice = info.get("finalPrice");
+        if(null == price){
+            price = new BigDecimal(0);
+        }
+        if(null == finalPrice){
+            finalPrice = new BigDecimal(0);
+        }
+        return price.add(finalPrice);
+    }
+
 
     private String getIdString(StringBuilder sb, List<Record> idList) {
         if(CollectionUtils.isEmpty(idList)){
