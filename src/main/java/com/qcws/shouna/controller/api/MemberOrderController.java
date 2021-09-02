@@ -70,9 +70,11 @@ public class MemberOrderController extends ApiController {
 			renderJson(Ret.fail(Constant.RETMSG, "参数错误"));
 			return;
 		}
-		if(0 < customerOrderService.findCountByColumns(Columns.create("status","finish").eq("customer_id",customer.getId()).eq("item_id",itemId))) {
-			renderJson(Ret.fail(Constant.RETMSG, "请勿重复提交！"));
-			return;
+		if(itemId != 23){
+			if(0 < customerOrderService.findCountByColumns(Columns.create("status","finish").eq("customer_id",customer.getId()).eq("item_id",itemId))) {
+				renderJson(Ret.fail(Constant.RETMSG, "请勿重复提交！"));
+				return;
+			}
 		}
 
 		CustomerOrder order = new CustomerOrder();
