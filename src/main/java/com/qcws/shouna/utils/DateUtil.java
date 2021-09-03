@@ -24,4 +24,15 @@ public class DateUtil {
         return false;
     }
 
+    /**
+     * 时间转字符串
+     * @param date
+     * @param type
+     * @return
+     */
+    public static String getDateToString(Date date, String type){
+        SimpleDateFormat sdf = new SimpleDateFormat(type);
+        return sdf.format(date);
+    }
+
 }

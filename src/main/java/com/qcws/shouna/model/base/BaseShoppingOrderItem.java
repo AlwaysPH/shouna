@@ -279,5 +279,18 @@ public abstract class BaseShoppingOrderItem<M extends BaseShoppingOrderItem<M>> 
 		return getStr("type");
 	}
 
+	/**
+	 * 发货快递单号
+	 */
+	public void setExNo(String exNo) {
+		set("exNo", exNo);
+	}
+
+	/**
+	 * 发货快递单号
+	 */
+	public String getExNo() {
+		return getStr("exNo");
+	}
 
 }
