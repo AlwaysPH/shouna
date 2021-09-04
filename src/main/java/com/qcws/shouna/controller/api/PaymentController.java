@@ -642,7 +642,11 @@ public class PaymentController extends ApiController {
         if(info.getType()==0) {
             CustomerOrderEvaluate orderEvaluate  = orderEvaluateService.findFirstByColumns(Columns.create("order_no",order.getOrderNo()));
             SysCity city =sysCityService.findFirstByColumns(Columns.create("name",order.getCity()));
-            order_amt = order.getAdvanceAmount().add(order.getFinalAmount()).add(city.getPrice());
+            if(null == order.getFinalAmount()){
+                order_amt = order.getDeposit().add(new BigDecimal(0));
+            }else {
+                order_amt = order.getDeposit().add(order.getFinalAmount());
+            }
             savebill(orderEvaluate.getArrangerId(),"服务",order.getOrderNo(),"订单"+order.getOrderNo()+"服务费",order_amt.multiply(city.getOrderRate()).setScale(2,BigDecimal.ROUND_HALF_UP));
         }else if(info.getType() == 1){
             order_amt = order.getPrice();

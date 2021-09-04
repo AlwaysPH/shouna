@@ -19,5 +19,16 @@ public class UploadUtil {
 		FileUtil.move(file.getFile(), dest, true);
 		return Jboot.configValue("jboot.web.imghost") + newFileName;
 	}
-	
+
+	public static String uploadExcel(UploadFile file) {
+		if (file == null || file.getFile() == null) {
+			return null;
+		}
+		String host = Jboot.configValue("jboot.web.excel");
+		String fix = file.getOriginalFileName().substring(file.getOriginalFileName().lastIndexOf("."));
+		String newFileName = System.currentTimeMillis() + RandomUtil.randomNumbers(8) + fix;
+		File dest = new File(host + newFileName);
+		FileUtil.move(file.getFile(), dest, true);
+		return host + File.separator + newFileName;
+	}
 }

@@ -106,6 +106,7 @@ public class ShoppingDeliveryController extends JbootController {
                 "LEFT JOIN customer_address ca on ca.id = co.address_id where co.`status` = '1' and co.settle_status='1' and i.`name` = '" + name + "'";
         List<Record> list = Db.find(sql);
         if(CollectionUtils.isEmpty(list)){
+            renderHtml(new MessageBox(false).toString());
             return;
         }
         String[] headers = { "订单号", "商品名称", "数量", "颜色", "大小", "收件人", "联系电话", "省份", "城市", "详细地址"};
@@ -172,6 +173,8 @@ public class ShoppingDeliveryController extends JbootController {
             workbook.write(response.getOutputStream());
         }catch (Exception e){
             log.error("导出数据失败", e);
+            renderHtml(new MessageBox(false).toString());
+            return;
         }
         renderNull();
     }
@@ -187,7 +190,7 @@ public class ShoppingDeliveryController extends JbootController {
     public void importData(){
         Boolean bool = true;
         UploadFile file = getFile("fileName");
-        String fileName = UploadUtil.uploadFile(file);
+        String fileName = UploadUtil.uploadExcel(file);
         //缓存文件
         File newFile = new File(fileName);
         try{

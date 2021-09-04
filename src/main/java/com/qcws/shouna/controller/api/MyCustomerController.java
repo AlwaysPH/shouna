@@ -49,7 +49,7 @@ public class MyCustomerController extends ApiController{
         }else {
             infoList = Db.find("SELECT id,nickname,headimg FROM(SELECT t1.id, IF (find_in_set(pid, @pids) > 0, @pids := concat(@pids, ',', id), 0) AS ischild, t1.regtime,t1.nickname,t1.headimg FROM(SELECT id, pid, regtime, nickname, headimg FROM customer_info WHERE STATUS = '0' ORDER BY pid, id) t1, (SELECT @pids := ?) t2) t3 WHERE ischild != 0", id);
             ids = getIdString(sb, infoList);
-            list = Db.find("SELECT count(*) pcount, SUM(t.deposit) amount,SUM(final_amount) finalPrice, MAX(t.overtime) time, t.customer_id customerId, c.nickname name, c.headimg headImg from customer_order t LEFT JOIN customer_info c on t.customer_id = c.id WHERE t.customer_id in ("+ids+") AND t.settle_status = 'finish' GROUP BY t.customer_id");
+            list = Db.find("SELECT count(*) pcount, SUM(t.deposit) deposit, SUM(final_amount) finalPrice, MAX(t.overtime) time, t.customer_id customerId, c.nickname name, c.headimg headImg from customer_order t LEFT JOIN customer_info c on t.customer_id = c.id WHERE t.customer_id in ("+ids+") AND t.settle_status = 'finish' GROUP BY t.customer_id");
 //            page = Db.paginate(pageNum, pageSize, "select count(*) pcount,SUM(t.price) amount,MAX(t.overtime) time,t.customer_id customerId, c.nickname name, c.headimg headImg", "from customer_order t LEFT JOIN customer_info c on t.customer_id = c.id where t.customer_id in ("+ids+") and t.status = 'finish' and t.settle_status = 'finish' GROUP BY t.customer_id");
         }
         List<Record> result = dealwithData(infoList, list);
