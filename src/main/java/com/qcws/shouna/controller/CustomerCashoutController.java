@@ -121,24 +121,4 @@ public class CustomerCashoutController extends JbootController {
         return paramMap;
 	}
 
-
-	public JSONObject getData(){
-        JSONObject jsonObject = new JSONObject();
-	    String mchId = getPara("mchId");
-        StringBuilder sb = new StringBuilder();
-        sb.append(File.separator).append("data").append(File.separator).append("test").append(File.separator)
-                .append("shouna-1.0.0").append(File.separator)
-                .append("webapp").append(File.separator).append("secret").append(File.separator)
-                .append("apiclient_cert.p12");
-        try (FileInputStream inputStream = new FileInputStream(new File(sb.toString()))) {
-            KeyStore keyStore = KeyStore.getInstance("PKCS12");
-            keyStore.load(inputStream, mchId.toCharArray());
-            jsonObject.put("data", keyStore);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
-        return jsonObject;
-    }
-
-
 }

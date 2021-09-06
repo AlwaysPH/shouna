@@ -184,10 +184,8 @@ public class WxUtil {
     public static KeyStore getCertificate(String mchId) {
         //try-with-resources 关流
         StringBuilder sb = new StringBuilder();
-        sb.append(File.separator).append("data").append(File.separator).append("shouna").append(File.separator)
-                .append("shouna-1.0.0").append(File.separator)
-                .append("webapp").append(File.separator).append("secret").append(File.separator)
-                .append("apiclient_cert.p12");
+        sb.append(File.separator).append("data").append(File.separator).append("shouna")
+                .append(File.separator).append("secret").append(File.separator).append("apiclient_cert.p12");
         try (FileInputStream inputStream = new FileInputStream(new File(sb.toString()))) {
             KeyStore keyStore = KeyStore.getInstance("PKCS12");
             keyStore.load(inputStream, mchId.toCharArray());
