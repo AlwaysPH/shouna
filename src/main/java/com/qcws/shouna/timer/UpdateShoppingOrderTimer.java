@@ -28,8 +28,8 @@ public class UpdateShoppingOrderTimer implements Runnable {
      * 遍历未付款、待收货、退货订单
      */
     public void updateShoppingOrder(){
-        List<ShoppingOrderItem> unPayList = orderItemService.findListByColumns(Columns.create("status", ShoppingOrderEnum.UN_PAY));
-        List<ShoppingOrderItem> awaitReceiptList = orderItemService.findListByColumns(Columns.create("status", ShoppingOrderEnum.AWAIT_RECEIPT));
+        List<ShoppingOrderItem> unPayList = orderItemService.findListByColumns(Columns.create("status", ShoppingOrderEnum.UN_PAY.getValue()));
+        List<ShoppingOrderItem> awaitReceiptList = orderItemService.findListByColumns(Columns.create("status", ShoppingOrderEnum.AWAIT_RECEIPT.getValue()));
         if(CollectionUtils.isNotEmpty(unPayList)){
             //遍历未付款列表
             for(ShoppingOrderItem order : unPayList){
