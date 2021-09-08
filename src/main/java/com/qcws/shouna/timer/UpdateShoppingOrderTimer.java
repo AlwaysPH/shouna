@@ -39,6 +39,7 @@ public class UpdateShoppingOrderTimer implements Runnable {
                 if(newDate.getTime() - countdown.getTime() > 15 * 60 * 1000){
                     log.info("订单号为{}的订单超过15分钟未付款，自动取消订单！", order.getOrderNo());
                     order.setStatus(ShoppingOrderEnum.CANCEL.getValue());
+                    order.setOvertime(new Date());
                     order.saveOrUpdate();
                 }
             }
@@ -52,6 +53,7 @@ public class UpdateShoppingOrderTimer implements Runnable {
                 if(newDate.getTime() - countdown.getTime() > 7 * 24 * 60 * 60 * 1000){
                     log.info("订单号为{}的订单超过7天未收货，自动收货！", order.getOrderNo());
                     order.setStatus(ShoppingOrderEnum.FINISH.getValue());
+                    order.setOvertime(new Date());
                     order.saveOrUpdate();
                 }
             }
